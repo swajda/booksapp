@@ -25,10 +25,20 @@
 
     function render() {
         for (let book of dataSource.books) {
-            const generatedHTML = templates.bookTemplate(book);
+            const ratingBgc = determineRatingBgc(book.rating);
+            const ratingWidth = book.rating * 10;
+            const generatedHTML = templates.bookTemplate({
+                id: book.id,
+                name: book.name,
+                price: book.price,
+                image: book.image,
+                rating: book.rating,
+                ratingBgc: ratingBgc,
+                ratingWidth: ratingWidth,
+              });
             const generatedDOM = utils.createDOMFromHTML(generatedHTML);
             const bookContainer = document.querySelector(select.containerOf.booksList);
-
+            
             bookContainer.appendChild(generatedDOM);
         }
     }
@@ -94,6 +104,22 @@
         }
     }
 
+    function determineRatingBgc(rating) {
+        let background = '';
+
+      if(rating < 6){
+        background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)';
+      } else if(rating > 6 && rating <= 8){
+        background = 'linear-gradient(to bottom, #b4df5b 0%, #b4df5b 100%)';
+      } else if(rating > 8 && rating <= 9){
+        background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+      } else if(rating > 9){
+        background = 'linear-gradient(to bottom, #ff0084 0%, #ff0084 100%)';
+      }
+
+      return background;
+    
+    }
 
     render();
     initActions();
